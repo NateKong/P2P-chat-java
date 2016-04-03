@@ -1,68 +1,35 @@
 <!doctype html>
 <html>
-<head>
+  <head>
     <title>Lab 4 chat</title>
     <style>
-	  body { font: 13px Helvetica, Arial; padding: 0px; margin: 0px;}
-	  #setUser { margin: 0px auto; padding-top: 10%; text-align:center; }  
-	  #usersDisplay { }
-	  #chatDisplay { box-sizing: border-box; }
-	  #chat { width: 100%; margin: 5px; padding: 2px; overflow: auto;}
-	  #chatForm { display: inline; background-color: #0000FF; padding: 1px; position: fixed; bottom: 0; width: 100%; }
-	  #chatForm input {  width: 80%; padding:6px;}
-      #chatForm button { float: right; width:75px; background: #0080FF; border: none; padding:7.5px; }
-	  #messages { list-style-type: none; margin: 0; padding: 0; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+	  #chat { float: left; width: 50%; overflow: auto;}
+	  #users { float: right: width: 15%; overflow: auto;}
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: #0080FF; border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-	  
-
+      #messages li:nth-child(odd) { background: #eee; }	  
     </style>
-</head>
-<body>
- <!-- <div id="setUser">  
-  	<form id="setUsername" action="">
-	  <h2>Please enter a username</h2>
-	  <input id="name" autocomplete="off" />
-	  <button>Send</button>
-	</form>
-	<div id='invalid'></div>
-  </div>
+  </head>
+  <body>
   
-  
-  <div id="usersDisplay">
-  </div>
-  
-    -->
-  <div id="chatDisplay">
-	<div id="chat"></div>
+	<div id="chat">CHAT</div>
+	<div id="users">USER</div>
 	<form action="">
-	  <input id="message" autocomplete="off" /></input>
-	  <button>Send</button>
+	  <input id="message" autocomplete="off" /><button>Send</button>
 	</form>
-  </div> 
 
 	
 	
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
-	  var serverSocket = io();
-
-	/*	//Sends the name
-	  $('#setUsername').submit(function(){
-		socket.emit('username', $('#name').val());
-		$('#name').val('');
-		return false;
-	  });
-
-	  //get and check usernames
-	  socket.on('username', function(usernames){
-		if(usernames[0] == false) {
-			
-		}
-		$('#chat').append($('<li>').text(msg));
-	  });
-	  */
+	  var socket = io();
+	  
 	  $('form').submit(function(){
 		socket.emit('chat message', $('#message').val());
 		$('#message').val('');
