@@ -31,8 +31,12 @@ io.on('connection', function(socket){
   var ip = addy.substring(7);//the IP address formatted
   console.log(ip + " has connected to the server");
 
+  socket.on('chat message', function(msg){
+    io.emit('chat message', ip + ': ' + msg);
+	console.log(ip + ': ' + msg);
+  });
   //sends the user names of everyone on the server
-  socket.on('username', function(name){
+  /*socket.on('username', function(name){
 	var usernames = false;
 	if (!(name in socketnames)){
 		socketnames.name = socket;//adds to object
@@ -40,9 +44,11 @@ io.on('connection', function(socket){
 		//usernames = Object.keys(socketnames);
 		usernames = [bob, john];
 	}
-	io.emit('username', usernames,); 
+	console.log(usernames);
+	io.emit('username', usernames); 
   });
-  
+  */
+/*  
   //sends the P2P information
   socket.on('p2p', function(username){
 	//if(username in socketnames){
@@ -50,14 +56,14 @@ io.on('connection', function(socket){
 		//console.dir(socketnames.username);
 	}
   });
-   
+ */  
   socket.on('disconnect', function(data){
 	//socketnames.splice(socketnames.indexOf(addy),1);
-	console.dir(socketnames);
-	console.log(socketnames.indexOf(addy));
+	//console.dir(socketnames);
+	//console.log(socketnames.indexOf(addy));
   	console.log(ip + ' has disconneted from the server');  
   });
-  
+ 
 });
 
 /**
