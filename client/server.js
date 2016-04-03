@@ -45,9 +45,9 @@ io.on('connection', function(socket){
   
   //sends the P2P information
   socket.on('p2p', function(username){
-	if(username in socketnames){
+	//if(username in socketnames){
 		//io.emit('p2p', socketnames.username);
-		console.dir(socketnames.username);
+		//console.dir(socketnames.username);
 	}
   });
    
