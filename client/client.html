@@ -63,7 +63,7 @@
 		$('#chat').append($('<li>').text(msg));
 	  });
 	  */
-	  $('#chatForm').submit(function(){
+	  $('form').submit(function(){
 		socket.emit('chat message', $('#message').val());
 		$('#message').val('');
 		return false;
