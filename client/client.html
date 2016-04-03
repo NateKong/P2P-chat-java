@@ -16,9 +16,14 @@
     </style>
   </head>
   <body>
-  
+	<form id= "User" action="">
+	  <input id="messnger" autocomplete="off" /><button>Send</button>
+	</form>
+	
 	<div id="chat">CHAT</div>
 	<div id="users">USER</div>
+	
+
 	<form id= "ARdi" action="">
 	  <input id="message" autocomplete="off" /><button>Send</button>
 	</form>
@@ -35,7 +40,11 @@
 		$('#message').val('');
 		return false;
 	  });
-  
+	$('#User').submit(function(){
+		socket.emit('Senduser', $('#messager').val());
+		$('#messager').val('');
+		return false;
+	  });
 	  socket.on('chat message', function(msg){
 		$('#chat').append($('<li>').text(msg));
 	  });
