@@ -4,8 +4,8 @@
     <title>Lab 4 chat</title>
     <style>
 	  body { font: 13px Helvetica, Arial; padding: 0px; margin: 0px;}
-	  #setUser { display:none; margin: 0px auto; padding-top: 10%; text-align:center; }  
-	  #usersDisplay { display:none; }
+	  #setUser { margin: 0px auto; padding-top: 10%; text-align:center; }  
+	  #usersDisplay { }
 	  #chatDisplay { box-sizing: border-box; }
 	  #chat { width: 100%; margin: 5px; padding: 2px; overflow: auto;}
 	  #chatForm { display: inline; background-color: #0000FF; padding: 1px; position: fixed; bottom: 0; width: 100%; }
@@ -20,11 +20,12 @@
 </head>
 <body>
   <div id="setUser">  
-  	<form action="">
+  	<form id="setUsername" action="">
 	  <h2>Please enter a username</h2>
 	  <input id="name" autocomplete="off" />
 	  <button>Send</button>
 	</form>
+	<div id='invalid'></div>
   </div>
   
   
@@ -46,6 +47,21 @@
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
 	  var serverSocket = io();
+
+		//Sends the name
+	  $('#setUsername').submit(function(){
+		socket.emit('username', $('#name').val());
+		$('#name').val('');
+		return false;
+	  });
+
+	  //get and check usernames
+	  socket.on('username', function(usernames){
+		if(usernames[0] == false) {
+			
+		}
+		$('#chat').append($('<li>').text(msg));
+	  });
 	  
 	  $('#chatForm').submit(function(){
 		socket.emit('chat message', $('#message').val());

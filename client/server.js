@@ -38,6 +38,7 @@ io.on('connection', function(socket){
 		socketnames.name = socket;//adds to object
 		console.log( Object.keys(socketnames) );
 		//usernames = Object.keys(socketnames);
+		usernames = [bob, john];
 	}
 	io.emit('username', usernames,); 
   });
