@@ -19,7 +19,7 @@
   
 	<div id="chat">CHAT</div>
 	<div id="users">USER</div>
-	<form action="">
+	<form id= "ARdi" action="">
 	  <input id="message" autocomplete="off" /><button>Send</button>
 	</form>
 
@@ -30,7 +30,7 @@
 	<script>
 	  var socket = io();
 	  
-	  $('form').submit(function(){
+	  $('#ARdi').submit(function(){
 		socket.emit('chat message', $('#message').val());
 		$('#message').val('');
 		return false;
