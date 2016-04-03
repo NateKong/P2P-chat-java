@@ -21,7 +21,7 @@ io.on('connection', function(socket){
 	//console.dir(socket);
 	var addy = socket.request.connection.remoteAddress;
 	var ip = addy.substring(7);
-	console.log("hello " + ip);
+	console.log(ip + " is now connected");
 	
   socket.on('Senduser', function(name){
 	  console.log(name);
@@ -33,7 +33,7 @@ io.on('connection', function(socket){
   });
   
   socket.on('disconnect', function(data){
-  	console.log("goodbye " + ip);  
+  	console.log(ip + " has left");  
   });
   
 });

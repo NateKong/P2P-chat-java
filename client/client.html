@@ -20,7 +20,7 @@
   <body>
   
 	<form id="User" action="">
-	  <input id="messnger" autocomplete="off" /><button>Send</button>
+	  <input id="username" autocomplete="off" /><button>Send</button>
 	</form>
 	
 	<div id="chat">CHAT</div>
@@ -38,16 +38,18 @@
 	<script>
 	  var socket = io();
 	  
+	  $('#User').submit(function(){
+		socket.emit('Senduser', $('#username').val());
+		$('#username').val('');
+		return false;
+	  });
+	  
 	  $('#ARdi').submit(function(){
 		socket.emit('chat message', $('#message').val());
 		$('#message').val('');
 		return false;
 	  });
-	$('#User').submit(function(){
-		socket.emit('Senduser', $('#messager').val());
-		$('#messager').val('');
-		return false;
-	  });
+
 	  socket.on('chat message', function(msg){
 		$('#chat').append($('<li>').text(msg));
 	  });
