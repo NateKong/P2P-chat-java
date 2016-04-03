@@ -48,7 +48,7 @@
 	<script>
 	  var serverSocket = io();
 
-		//Sends the name
+	/*	//Sends the name
 	  $('#setUsername').submit(function(){
 		socket.emit('username', $('#name').val());
 		$('#name').val('');
@@ -62,7 +62,7 @@
 		}
 		$('#chat').append($('<li>').text(msg));
 	  });
-	  
+	  */
 	  $('#chatForm').submit(function(){
 		socket.emit('chat message', $('#message').val());
 		$('#message').val('');
