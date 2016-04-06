@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <title>P2P</title>
+	<style>  	  
+	  #chatbox { margin: auto 5%; }
+	  #chat { float: left; width: 90%; overflow: auto;  }
+	  #sendMessage { border: 2px solid #000; padding: 3px; position: fixed; bottom: 0; width: 90%; }
+      #sendMessage input {  height: 3em; margin: 0; padding: 0; width: 89.25%;  }
+      #sendMessage button { float:right; width: 9.25%; height: 3em; background: #0080FF; border: none; }
+    </style>
+  </head>
+  <body>
+
+	<!--Chat box for one user-->	
+	<div id="chatbox">
+		<div id="chat">CHAT</div>
+		
+		<form id="sendMessage" action="">
+		  <input id="message" autocomplete="off" /><button>Send</button>
+		</form>
+	</div>
+		
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+	  //connection to server
+	  //var server = io('http://www.teamone.onthewifi.com:54545');
+	  var server = io('http://10.0.0.232:54545');
+	  
+		
+	//send message
+	$('#sendMessage').submit(function(){
+	  var msg = 'A: ' + $('#message').val();
+	  peerSocket.emit('chat message', msg);
+	  $('#chat').append($('<li>').text(msg));
+	  $('#message').val('');
+	  return false;
+	});
+				
+
+	  
+	  var io = require('socket.io')(http);
+	  io.on('connection', function(socket){
+		//get message
+	    socket.on('chat message', function(msg){
+		  msg = 'B: ' + msg;
+		  $('#chat').append($('<li>').text(msg));
+		});
+	  });
+	</script>
+  </body>
+</html>
