@@ -8,8 +8,7 @@
 	  #User{ margin: 10%; auto; text-align: center;}
 	  
 
-      #userList{ margin: 10%; auto; text-align: center; }
-	  #selectChat{ width: 100px;}
+      #userList{ margin: 10%; auto; text-align: center;  }
 	  
     </style>
   </head>
@@ -20,12 +19,8 @@
 	  <input id="username" autocomplete="off" />
 	  <button>Send</button>
 	</form>
-	<!--User selects another peer to talk to-->
-	<div id='userList'>
-	  <h2>Please select a user to P2P chat with</h2>
-		<select id="selectChat" ></select>
-		<input type="button" onclick="selectUser()" value="Select One">
-	</div>
+	<!--shows all users and IPs for peer to talk to-->
+	<div id='userList'></div>
 		
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
@@ -43,48 +38,13 @@
 	  
 	  //gets the list of users
 	  server.on('nameList', function(names){
-	    var namelist = '';
-		$('#selectChat').empty();		
-		var nl = document.getElementById('selectChat');
+		$('#userList').empty();		
+
 		for(var i=0; i<names.length; i++){
-			var option = document.createElement('option');
-			option.text = names[i];
-			nl.add(option);
+		  var name = Object.keys(names[i])[0];
+		  var user = name + ': ' + names[i][name];
+		  $('#userList').append( $('<li>').text(user) );	 	
 		}
-		//make name disappear
-		$('#User').hide();
-		$('#userList').show();
-	  });
-	  
-	  //user selects a user to talk to
-	  function selectUser() {
-	    $('#userList').hide();
-	    $('#chatbox').show();
-		server.emit('p2p', $("#selectChat").val() );
-	  }
-	  
-	  //get peer socket info
-	  server.on('p2pInfo', function(peerNum){
-		var peerSocket = io('http://' + peerNum);//create p2p connection 
-		
-		//send message
-		$('#sendMessage').submit(function(){
-		  var msg = 'A: ' + $('#message').val();
-		  peerSocket.emit('chat message', msg);
-		  $('#chat').append($('<li>').text(msg));
-		  $('#message').val('');
-		  return false;
-	    });
-				
-	  });
-	  
-	  var io = require('socket.io')(http);
-	  io.on('connection', function(socket){
-		//get message
-	    socket.on('chat message', function(msg){
-		  msg = 'B: ' + msg;
-		  $('#chat').append($('<li>').text(msg));
-		});
 	  });
 	</script>
   </body>
