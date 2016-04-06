@@ -23,32 +23,49 @@ io.on('connection', function(socket){
 	//console.dir(socket);
 	//get information and say what ip entered the server
 	var addy = socket.request.connection.remoteAddress;
-	var ip = addy.substring(7);
-	console.log(ip + " is now connected");
+	var port = socket.request.connection.remotePort;
+	var mySocket = addy.substring(7) + ':' + port;
+	console.log(mySocket + " is now connected");
 	
   //gets the name of the user	
   socket.on('Senduser', function(name){
-	  //console.log(name);
-	/*  socketnames.push({name:name, socket:socket});
-	  
-		console.log(Object.keys(socketnames[0]));
-		console.dir(socketnames);
-	 */
-	 socketnames.push(name);
-	 for(var i = 0; i<socketnames.length; i++){console.log(socketnames[i]);}
+	console.log(mySocket + ": " + name);
+	var obj = new Object();
+	obj[name] = mySocket;
+	socketnames.push(obj);
 	
-	//send user name back to 
-	io.emit('nameList', socketnames);
+    var names =[];	
+	for(var i = 0; i<socketnames.length; i++){
+		names.push(Object.keys(socketnames[i]));
+	}
+		
+	//sends all usernames to clients
+	io.emit('nameList', names);
 	 
   });
 	
+  //get user for p2p
+  socket.on('p2p', function(person){
+	  var peerSocket;
+	  
+	  for (var i=0; i<socketnames.length; i++){
+		for(person in socketnames[i]){
+	      //console.log(socketnames[i][person]);
+		  peerSocket = socketnames[i][person];
+		}
+	  }
+
+	  io.emit('p2pInfo', peerSocket);
+  });  
+	
   socket.on('chat message', function(msg){
-    io.emit('chat message', ip + ': ' + msg);
-	console.log(ip + ': ' + msg);
+    io.emit('chat message', mySocket + ': ' + msg);
+	console.log(mySocket + ': ' + msg);
   });
   
+  //connection has stopped
   socket.on('disconnect', function(data){
-  	console.log(ip + " has left");  
+  	console.log(mySocket + " has left");  
   });
   
 });

@@ -46,6 +46,8 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
+	
+	
 	  //when document is ready
 	  $(document).ready(function(){
 		$('#userList').hide();
@@ -53,18 +55,19 @@
 	  });
 	
 	  //connection to server
-	  var socket = io();
+	  var server = io();
 	  
 	  //sends the username
 	  $('#User').submit(function(){
-		socket.emit('Senduser', $('#username').val());
+		server.emit('Senduser', $('#username').val());
 		$('#username').val('');
 		return false;
 	  });
 	  
 	  //gets the list of users
-	  socket.on('nameList', function(names){
-	    var namelist = '';		
+	  server.on('nameList', function(names){
+	    var namelist = '';
+		$('#selectChat').empty();		
 		var nl = document.getElementById('selectChat');
 		for(var i=0; i<names.length; i++){
 			var option = document.createElement('option');
@@ -76,19 +79,34 @@
 		$('#userList').show();
 	  });
 	  
+	  //user selects a user to talk to
 	  function selectUser() {
 	    $('#userList').hide();
 	    $('#chatbox').show();
-		document.getElementById("mySelect").single = true;
+		server.emit('p2p', $("#selectChat").val() );
 	  }
 	  
+	  //get peer socket info
+	  server.on('p2pInfo', function(peerNum){
+		var peerSocket = io(peerNum);
+		
+		
+		
+	  });
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  $('#sendMessage').submit(function(){
-		socket.emit('chat message', $('#message').val());
+		server.emit('chat message', $('#message').val());
 		$('#message').val('');
 		return false;
 	  });
 
-	  socket.on('chat message', function(msg){
+	  server.on('chat message', function(msg){
 		$('#chat').append($('<li>').text(msg));
 	  });
 	</script>
