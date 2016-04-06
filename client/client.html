@@ -9,9 +9,9 @@
       body { font: 13px Helvetica, Arial; }
 	  #chat { float: left; width: 50%; overflow: auto;}
 	  #users { float: right: width: 15%; overflow: auto;}
-      #ARdi { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      #ARdi input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      #ARdi button { width: 9%; background: #0080FF; border: none; padding: 10px; }
+      #chatbox #ARdi { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      #chatbox #ARdi input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      #chatbox #ARdi button { width: 9%; background: #0080FF; border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }	  
@@ -23,14 +23,13 @@
 	  <input id="username" autocomplete="off" /><button>Send</button>
 	</form>
 	
-	<div id="chat">CHAT</div>
-	<div id="users">USER</div>
-	
-
-	<form id="ARdi" action="">
-	  <input id="message" autocomplete="off" /><button>Send</button>
-	</form>
-
+	<div id="chatbox">
+		<div id="chat">CHAT</div>
+		
+		<form id="ARdi" action="">
+		  <input id="message" autocomplete="off" /><button>Send</button>
+		</form>
+	</div>
 	
 	
 	<script src="/socket.io/socket.io.js"></script>
