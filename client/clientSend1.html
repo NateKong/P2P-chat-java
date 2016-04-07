@@ -2,7 +2,11 @@
 <html>
   <head>
     <title>P2P</title>
-	<style>  	  
+	<style>
+	  body{ margin:0; padding:0; }
+	  #ip{ margin: 0 auto; text-align: center; }
+	  input{ width: 200px;}
+	  
 	  #chatbox { margin: auto 5%; }
 	  #chat { float: left; width: 90%; overflow: auto;  }
 	  #sendMessage { border: 2px solid #000; padding: 3px; position: fixed; bottom: 0; width: 90%; }
@@ -11,7 +15,12 @@
     </style>
   </head>
   <body>
-
+	<!--User IP and port-->
+	<form id="ip" action="">
+	  <h2>Please enter IP:Port</h2>
+	  <input id="info" autocomplete="off" />
+	  <button>Send</button>
+	</form>
 	<!--Chat box for one user-->	
 	<div id="chatbox">
 		<div id="chat">CHAT</div>
@@ -21,32 +30,33 @@
 		</form>
 	</div>
 		
+		
+		
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
-	  //connection to server
-	  //var server = io('http://www.teamone.onthewifi.com:54545');
-	  var server = io('http://10.0.0.232:54545');
-	  
-		
-	//send message
-	$('#sendMessage').submit(function(){
-	  var msg = 'A: ' + $('#message').val();
-	  peerSocket.emit('chat message', msg);
-	  $('#chat').append($('<li>').text(msg));
-	  $('#message').val('');
-	  return false;
-	});
-				
+	  var p2p;
 
+	  $(document).ready(function(){
+		$('#chatbox').hide();
+	  });
 	  
-	  var io = require('socket.io')(http);
-	  io.on('connection', function(socket){
-		//get message
-	    socket.on('chat message', function(msg){
-		  msg = 'B: ' + msg;
-		  $('#chat').append($('<li>').text(msg));
-		});
+	  //connection to peer
+	  $('#ip').submit(function(){
+		//p2p = io( $('#info').val() );
+		$('#info').val('');
+		$('#ip').hide();
+		$('#chatbox').show();
+		return false;
+	  });
+	  
+	  //send message
+	  $('#sendMessage').submit(function(){
+	    var msg = 'A: ' + $('#message').val();
+	    p2p.emit('chat message', msg);
+	    $('#chat').append($('<li>').text(msg));
+	    $('#message').val('');
+	    return false;
 	  });
 	</script>
   </body>
