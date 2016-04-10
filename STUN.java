@@ -1,7 +1,7 @@
 /**
  * A UDP server
  * UDP
- * @author Nathan Kong, Ardeshir Bastani, Y
+ * @author Nathan Kong, Ardeshir Bastani, Yang Chao
  *
  */
 
@@ -25,18 +25,18 @@ public class STUN extends Thread{
 	 */
 	public void run(){
 		while(true){
-			try{
-				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + " ...");
-				
+			try{	
 				//gets a client with the ip and port number
+				System.out.println("Waiting for client on: 54545...");
 				Socket server = serverSocket.accept();
-				System.out.println( "Just connected to " + server.getRemoteSocketAddress() );
+				System.out.println( "Just connected with " + server.getRemoteSocketAddress() );
 				
 				//creates a stream to talk out of the socket
 	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
 		        
 	            //tells the client their IP and port
-	            out.writeUTF("Your IP and port is: " + server.getRemoteSocketAddress() );
+	            String socketInfo = server.getRemoteSocketAddress().toString();
+	            out.writeUTF("Your IP and port is:" + socketInfo.substring(1) );
 	            
 	            
 				
