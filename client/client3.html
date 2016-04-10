@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Lab 4 chat</title>
+	<style>  
+      body { font: 13px Helvetica, Arial; margin:0px; padding:0px }
+	  #User{ margin: 10%; auto; text-align: center;}
+      #userList{ margin: 10%; text-align: center;  }
+	  a{ margin: 20%; }
+    </style>
+  </head>
+  <body>
+	<!--User Enters a Name-->
+	<form id="User" action="">
+	  <h2>Please enter your name</h2>
+	  <input id="username" autocomplete="off" />
+	  <button>Send</button>
+	</form>
+	<!--shows all users and IPs for peer to talk to-->
+	<div id='userList'></div>
+		
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+	  $(document).ready(function(){
+		$('#userList').hide();
+	  });
+	  
+	  //connection to server
+	  var server = io();
+	  
+	  //sends the username
+	  $('#User').submit(function(){
+		server.emit('Senduser', $('#username').val());
+		$('#username').val('');
+		$('#User').hide();
+		$('#userList').show();
+		return false;
+	  });
+	  
+	  //gets the list of users
+	  server.on('nameList', function(names){
+		$('#userList').empty();		
+
+		for(var i=0; i<names.length; i++){
+		  var name = Object.keys(names[i])[0];
+		  var user = name + ': ' + names[i][name];
+		  $('#userList').append( $('<li>').text(user) );	 	
+		}
+		window.open('#', '_blank');
+	  });
+	</script>
+  </body>
+</html>
