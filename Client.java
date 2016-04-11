@@ -13,58 +13,84 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class Client {
+public class Client extends Thread{
 
-	public static void main(String[] args) {
+	String activity;
+	static String myIp;
+	static int myPort;
+	static String peerIp;
+	static int peerPort;
+	
+	public Client(String activity){
+		this.activity = activity;
+		this.myIp = "";
+		this.peerIp = "";
+	}
+	
+	/**
+	 * runs the threads to listen to the port and talk to the peer
+	 */
+	public void run(){
+		if(activity == "listen"){
+			peerListen();
+		}else{
+			peerSend();
+		}
+	}
+	
+	/**
+	 * Starts the program
+	 * @param args
+	 * @throws SocketException 
+	 * @throws UnknownHostException 
+	 */
+	public static void main(String[] args) throws Exception {
       //String serverName = "teamone.onthewifi.com";
 	  String serverName = "10.0.0.232";
 	  int port = 54545;
-	  
-      try
-      {
-    	 //connect to server
-         System.out.println("Connecting to " + serverName + ":" + port );
-         Socket client = new Socket(serverName, port);
-         System.out.println("Just connected with " + client.getRemoteSocketAddress());
-         
-         //OutputStream outToServer = client.getOutputStream();
-         //DataOutputStream out = new DataOutputStream(outToServer);
-         //out.writeUTF("Hello from " + client.getLocalSocketAddress());
-         
-         //Get info from server
-         InputStream inFromServer = client.getInputStream();
-         DataInputStream in = new DataInputStream(inFromServer);
-         
-         //Get your network info
-         ArrayList<String> myInfo = new ArrayList<String>();
-         String mInfo = in.readUTF();
-         System.out.println("Server says: " + mInfo);
-         for (String retval: mInfo.split(":") ){
-        	 myInfo.add(retval);
-         }
-         
-         //listen on socket
-         
-         
-         //Get peer info
-         ArrayList<String> peerInfo = new ArrayList<String>();
-         String pInfo = in.readUTF();
-         System.out.println("Server says: " + pInfo );
-         for (String retval: pInfo.split(":") ){
-        	 peerInfo.add(retval);
-         }
 
-      }catch(IOException e)
-      {
-         e.printStackTrace();
-      }
+      // prepare Socket and data to send
+      DatagramSocket clientSocket = new DatagramSocket();
+      byte[] sendData = "Hello".getBytes();
+      System.out.println("sending Hello to server");
 
+      // send Data to Server
+      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(serverName), port);
+      clientSocket.send(sendPacket);
+
+      // receive Data 
+      DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
+      clientSocket.receive(receivePacket);
+      System.out.println("received data from server");
+
+      // Convert Response to IP and Port
+      String response = new String(receivePacket.getData());
+      String[] splitResponse = response.split(":");
+      myIp = splitResponse[0];
+      myPort = Integer.parseInt(splitResponse[1]);
+  	  peerIp = splitResponse[2];
+  	  peerPort = Integer.parseInt(splitResponse[3]);
+      System.out.println("my Info: " + myIp + ":" + myPort );
+      System.out.println("peer Info: " + peerIp + ":" + peerPort );
+
+      //listen to port
+      /*Thread listen = new Client("listen");
+      listen.start();
+      //send datagram
+      Thread send = new Client("send");
+      send.start();
+      */
+  	  
+  	  clientSocket.close();
 	}//main
 	
-	private static void peerChat(ArrayList<String> socketAddress) {
+	/**
+	 * sends the p2p chat
+	 */
+	private static void peerSend() {
 
 		try {
-			Socket peer = new Socket(socketAddress.get(1), Integer.parseInt(socketAddress.get(2)) );
+			/*Socket peer = new Socket(socketAddress.get(1), Integer.parseInt(socketAddress.get(2)) );
 
 			//output to peer
 			OutputStream outToPeerB = peer.getOutputStream();
@@ -76,10 +102,17 @@ public class Client {
 	        DataInputStream in = new DataInputStream(inFromServer);
 	        System.out.println("B: " + in.readUTF());
 	        
-	        peer.close();
-		} catch (IOException e) {
+	        peer.close();*/
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * The listens to the socket
+	 */
+	private static void peerListen(){
+		
 	}
 
 }

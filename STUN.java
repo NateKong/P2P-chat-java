@@ -1,6 +1,6 @@
 /**
  * A UDP server
- * UDP
+ * Listens to port 54545 and sends the ip addresses and ports to the clients
  * @author Nathan Kong, Ardeshir Bastani, Yang Chao
  *
  */
@@ -8,57 +8,49 @@
 import java.net.*;
 import java.io.*;
 
-public class STUN extends Thread{
-	private ServerSocket serverSocket;
-	
-	/**
-	 * constructor
-	 * @param port number to listen to
-	 * @throws IOException
-	 */
-	public STUN(int port) throws IOException{
-		serverSocket = new ServerSocket(port);
-	}
-	
-	/**
-	 * Runs the server socket thread
-	 */
-	public void run(){
+public class STUN{
+
+	public static void main(String[] args) throws IOException {
+
+		//create a socket for udp on port 54545
+		DatagramSocket serverSocket1 = new DatagramSocket(54545);
+		System.out.println("Waiting for Clients on Port 54545...");
+		
+		
 		while(true){
-			try{	
-				//gets a client with the ip and port number
-				System.out.println("Waiting for client on: 54545...");
-				Socket server = serverSocket.accept();
-				System.out.println( "Just connected with " + server.getRemoteSocketAddress() );
-				
-				//creates a stream to talk out of the socket
-	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
-		        
-	            //tells the client their IP and port
-	            String socketInfo = server.getRemoteSocketAddress().toString();
-	            out.writeUTF("Your IP and port is:" + socketInfo.substring(1) );
-	            
-	            
-				
-			}catch(IOException e){
-				e.printStackTrace();
-				break;
-			}
+			/** First client **/
+			//create packet to receive data
+			DatagramPacket receivePacket1 = new DatagramPacket(new byte[1024], 1024);
+			serverSocket1.receive(receivePacket1);
+			
+			//get address and port from datagram
+			InetAddress p1IPAddress = receivePacket1.getAddress();
+			int p1Port = receivePacket1.getPort();
+			System.out.println("RECEIVED: " + p1IPAddress.toString() + ":" + p1Port);
+			
+			/** Second client **/
+			//DatagramSocket serverSocket2 = new DatagramSocket(54545);
+			System.out.println("Waiting for Clients on Port 54545...");
+			//create packet to receive data
+			DatagramPacket receivePacket2 = new DatagramPacket(new byte[1024], 1024);
+			serverSocket1.receive(receivePacket2);
+			
+			//get address and port from datagram
+			InetAddress p2IPAddress = receivePacket2.getAddress();
+			int p2Port = receivePacket2.getPort();
+			String msgInfoOfClient2 = p2IPAddress.toString().substring(1) + ":" + p2Port + ":" + p1IPAddress.toString().substring(1) + ":"+ p1Port + ":end";
+			System.out.println("RECEIVED: " + p2IPAddress.toString() + ":" + p2Port);
+			
+			/** Send data to each other **/
+			String msgInfoOfClient1 = p1IPAddress.toString().substring(1) + ":" + p1Port + ":" + p2IPAddress.toString().substring(1) + ":"+ p2Port + ":end";
+			
+			// Send Information of Client2 to Client1
+	        serverSocket1.send(new DatagramPacket(msgInfoOfClient1.getBytes(), msgInfoOfClient1.getBytes().length, p1IPAddress, p1Port));
+
+	        // Send Information of Client1 to Client2
+	        serverSocket1.send(new DatagramPacket(msgInfoOfClient2.getBytes(), msgInfoOfClient2.getBytes().length, p2IPAddress, p2Port));
 		}
-	}
-	
-	/**
-	 * Runs the server bye creating a server and listens
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		int port = 54545;
-		try{
-			Thread t = new STUN(port);
-			t.run();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+
 
 	}
 
