@@ -84,6 +84,10 @@ public class Client extends Thread{
       //send datagram
       Thread send = new Client("send");
       send.start();
+	  
+	  //waits for thread to end
+	  listen.join();
+	  send.join();
       
   	  
   	  clientSocket.close();
