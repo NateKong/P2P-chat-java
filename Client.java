@@ -51,8 +51,8 @@ public class Client extends Thread{
 	 * @throws UnknownHostException 
 	 */
 	public static void main(String[] args) throws Exception {
-      //String serverName = "teamone.onthewifi.com";
-	  String serverName = "10.0.0.232";
+      String serverName = "teamone.onthewifi.com";
+	  //String serverName = "10.0.0.232";
 	  int port = 54545;
 
       // prepare Socket and data to send
@@ -110,7 +110,7 @@ public class Client extends Thread{
 			DataInputStream in = new DataInputStream( mySoc.getInputStream() );
 			
 			//create and send message
-			String msg = getTime() + "\tA: Can you hear me?";
+			String msg = getTime() + "\t" + myPort + ": Can you hear me?";
 			out.writeUTF(msg);
 			System.out.println(msg);
 			
@@ -146,7 +146,7 @@ public class Client extends Thread{
 		System.out.println(getTime() + "\t" + msg);
 		
 		//create a message and send it to Client A
-		msg = getTime() + "\tB: Yes I can hear you!";
+		msg = getTime() + "\t" +myPort+ ": Yes I can hear you!";
 		out.writeUTF(msg);
 		System.out.println(msg);
 		
