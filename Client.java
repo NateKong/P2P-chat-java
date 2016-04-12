@@ -99,19 +99,28 @@ public class Client extends Thread{
 	private static void peerSend() {
 
 		try {
-			/*Socket peer = new Socket(socketAddress.get(1), Integer.parseInt(socketAddress.get(2)) );
-
-			//output to peer
-			OutputStream outToPeerB = peer.getOutputStream();
-	        DataOutputStream out = new DataOutputStream(outToPeerB);
-	        out.writeUTF("Hello from peer A");
-	        
-	        //input from peer
-	        InputStream inFromServer = peer.getInputStream();
-	        DataInputStream in = new DataInputStream(inFromServer);
-	        System.out.println("B: " + in.readUTF());
-	        
-	        peer.close();*/
+			System.out.println("Sending to Socket: " + myPort);
+			Socket peerClient = new Socket(myport);
+			
+			  //either one these two
+			//Output = new DataOutputStream(peerclinet.getOutputStream);			
+			//OutputStream outToPeer = client.getOutputStream();
+			
+			DataOutputStream out = new DataOutputStream(outToPeer);
+			out.writeUTF("Hey  " + client.getSocketAddress());
+			
+			
+			//creat stream to talk to other peer
+			DataInputStream in = new DataInputStream(peer.getInputStream());
+			DataOutputStream out = new DataOutputStream(peer.getOutputStream());
+			
+			//get strin from client B
+			String msg = in.readUTF();
+			System.out.println(msg);
+			
+			//close socket
+			peerClient.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
