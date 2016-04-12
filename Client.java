@@ -11,7 +11,8 @@
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.text.*;
 
 public class Client extends Thread{
 
@@ -27,7 +28,7 @@ public class Client extends Thread{
 		this.peerIp = "";
 	}
 	
-	/**
+	/**************************************************
 	 * runs the threads to listen to the port and talk to the peer
 	 */
 	public void run(){
@@ -43,7 +44,7 @@ public class Client extends Thread{
 	  
 	}
 	
-	/**
+	/**************************************************
 	 * Starts the program
 	 * @param args
 	 * @throws SocketException 
@@ -93,40 +94,39 @@ public class Client extends Thread{
   	  clientSocket.close();
 	}//main
 	
-	/**
+	/**************************************************
 	 * sends the p2p chat
 	 */
 	private static void peerSend() {
 
 		try {
-			System.out.println("Sending to Socket: " + myPort);
-			Socket peerClient = new Socket(myport);
+			//create socket
+			System.out.println("Sending to Socket: " + peerPort);
+			Socket mySoc = new Socket(peerIp, peerPort);
+			pause();
+					
+			//create streams
+			DataOutputStream out = new DataOutputStream( mySoc.getOutputStream() );
+			DataInputStream in = new DataInputStream( mySoc.getInputStream() );
 			
-			  //either one these two
-			//Output = new DataOutputStream(peerclinet.getOutputStream);			
-			//OutputStream outToPeer = client.getOutputStream();
-			
-			DataOutputStream out = new DataOutputStream(outToPeer);
-			out.writeUTF("Hey  " + client.getSocketAddress());
-			
-			
-			//creat stream to talk to other peer
-			DataInputStream in = new DataInputStream(peer.getInputStream());
-			DataOutputStream out = new DataOutputStream(peer.getOutputStream());
-			
-			//get strin from client B
-			String msg = in.readUTF();
+			//create and send message
+			String msg = getTime() + "\tA: Can you hear me?";
+			out.writeUTF(msg);
 			System.out.println(msg);
 			
+			//get string from client B
+			msg = in.readUTF();
+			System.out.println(getTime() + "\t" + msg);
+			
 			//close socket
-			peerClient.close();
+			mySoc.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
+	/**************************************************
 	 * The listens to the socket
 	 * @throws Exception 
 	 */
@@ -135,8 +135,7 @@ public class Client extends Thread{
 		System.out.println("Listening on Socket: " + myPort);
 		ServerSocket peerSocket = new ServerSocket(myPort);
 		Socket peer = peerSocket.accept();
-		System.out.println("Just connected with " + peer.getRemoteSocketAddress() );
-				
+		System.out.println("Just connected with peer");
 		
 		//create a stream to talk to other peer
 		DataInputStream in = new DataInputStream(peer.getInputStream());
@@ -144,15 +143,33 @@ public class Client extends Thread{
 		
 		//get string from client A
 		String msg = in.readUTF();
-		System.out.println(msg);
+		System.out.println(getTime() + "\t" + msg);
 		
 		//create a message and send it to Client A
-		msg = "B: I got your message A";
+		msg = getTime() + "\tB: Yes I can hear you!";
 		out.writeUTF(msg);
 		System.out.println(msg);
 		
 		//close socket
 		peerSocket.close();
 	}
-
+	
+	/**************************************************
+	 * Creates a time stamp
+	 */
+	private static String getTime(){
+        DateFormat df = new SimpleDateFormat("hh:mm:ss");
+        Date dateobj = new Date();
+        return df.format(dateobj);
+	}
+	
+	/**************************************************
+	 * Creates a random timer to wait
+	 */
+	private static void pause()throws Exception{
+		//create random number between 1 and 15
+		Random rand = new Random();
+		int breath = rand.nextInt(15) + 1;
+		Thread.sleep(breath*1000);
+	}
 }
