@@ -31,11 +31,16 @@ public class Client extends Thread{
 	 * runs the threads to listen to the port and talk to the peer
 	 */
 	public void run(){
+	  try{
 		if(activity == "listen"){
 			peerListen();
 		}else{
 			peerSend();
 		}
+	  }catch(Exception e){
+		  e.printStackTrace();
+	  }
+	  
 	}
 	
 	/**
@@ -74,12 +79,12 @@ public class Client extends Thread{
       System.out.println("peer Info: " + peerIp + ":" + peerPort );
 
       //listen to port
-      /*Thread listen = new Client("listen");
+      Thread listen = new Client("listen");
       listen.start();
       //send datagram
       Thread send = new Client("send");
       send.start();
-      */
+      
   	  
   	  clientSocket.close();
 	}//main
@@ -110,9 +115,31 @@ public class Client extends Thread{
 	
 	/**
 	 * The listens to the socket
+	 * @throws Exception 
 	 */
-	private static void peerListen(){
+	private static void peerListen() throws Exception{
+		//create and listen to socket
+		System.out.println("Listening on Socket: " + myPort);
+		ServerSocket peerSocket = new ServerSocket(myPort);
+		Socket peer = peerSocket.accept();
+		System.out.println("Just connected with " + peer.getRemoteSocketAddress() );
+				
 		
+		//create a stream to talk to other peer
+		DataInputStream in = new DataInputStream(peer.getInputStream());
+		DataOutputStream out = new DataOutputStream(peer.getOutputStream());
+		
+		//get string from client A
+		String msg = in.readUTF();
+		System.out.println(msg);
+		
+		//create a message and send it to Client A
+		msg = "B: I got your message A";
+		out.writeUTF(msg);
+		System.out.println(msg);
+		
+		//close socket
+		peerSocket.close();
 	}
 
 }

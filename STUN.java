@@ -42,6 +42,7 @@ public class STUN{
 			System.out.println("RECEIVED: " + p2IPAddress.toString() + ":" + p2Port);
 			
 			/** Send data to each other **/
+			//Structure of message -> myIp:myPort:peerIp:peerPort:end
 			String msgInfoOfClient1 = p1IPAddress.toString().substring(1) + ":" + p1Port + ":" + p2IPAddress.toString().substring(1) + ":"+ p2Port + ":end";
 			
 			// Send Information of Client2 to Client1
