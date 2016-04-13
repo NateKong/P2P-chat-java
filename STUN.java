@@ -1,7 +1,7 @@
 /**
  * A UDP server
  * Listens to port 54545 and sends the ip addresses and ports to the clients
- * @author Nathan Kong, Ardeshir Bastani, Yang Chao
+ * @author Nathan Kong, Ardeshir Bastani, Yangcha Ho
  *
  */
 
@@ -13,13 +13,12 @@ public class STUN{
 	public static void main(String[] args) throws IOException {
 
 		//create a socket for udp on port 54545
-		DatagramSocket serverSocket1 = new DatagramSocket(54545);
-		System.out.println("Waiting for Clients on Port 54545...");
-		
+		DatagramSocket serverSocket1 = new DatagramSocket(54545);	
 		
 		while(true){
 			/** First client **/
 			//create packet to receive data
+			System.out.println("Waiting for Clients on Port 54545...");
 			DatagramPacket receivePacket1 = new DatagramPacket(new byte[1024], 1024);
 			serverSocket1.receive(receivePacket1);
 			

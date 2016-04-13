@@ -5,7 +5,7 @@
  * Gets IP and Port
  * Creates TCP connection with peer
  * listens on port
- * @author Nathan Kong, Ardeshir Bastani, Yang Chao
+ * @author Nathan Kong, Ardeshir Bastani, Yangcha Ho
  *
  */
 
@@ -51,8 +51,8 @@ public class Client extends Thread{
 	 * @throws UnknownHostException 
 	 */
 	public static void main(String[] args) throws Exception {
-      String serverName = "teamone.onthewifi.com";
-	  //String serverName = "10.0.0.232";
+      //String serverName = "teamone.onthewifi.com";
+	  String serverName = "10.0.0.71";
 	  int port = 54545;
 
       // prepare Socket and data to send
@@ -81,14 +81,17 @@ public class Client extends Thread{
 	  System.out.println("\n\n");
 
       //listen to port
-      Thread listen = new Client("listen");
-      listen.start();
+      //Thread listen = new Client("listen");
+      //listen.start();
+      
+      Thread.sleep(2000);
+      
       //send datagram
       Thread send = new Client("send");
       send.start();
-	  
+      
 	  //waits for thread to end
-	  listen.join();
+	  //listen.join();
 	  send.join();
       
   	  
