@@ -13,11 +13,11 @@ public class SendClient {
 	      byte[] sendData = "Hello".getBytes();
 	      System.out.println("sending Hello to server");
 	      
-	      for (int i=0; i<50; i++){
+	      for (int i=0; i<30; i++){
 		      // send Data to Server
 		      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(serverName), port);
 		      clientSocket.send(sendPacket);
-		      Thread.sleep(2000);
+		      Thread.sleep(1000*i);
 	      }
 	}
 
