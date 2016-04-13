@@ -13,14 +13,14 @@ public class STUN{
 	public static void main(String[] args) throws IOException {
 
 		//create a socket for udp on port 54545
-		DatagramSocket serverSocket1 = new DatagramSocket(54545);	
+		DatagramSocket serverSocket = new DatagramSocket(54545);	
 		
 		while(true){
 			/** First client **/
 			//create packet to receive data
 			System.out.println("Waiting for Clients on Port 54545...");
 			DatagramPacket receivePacket1 = new DatagramPacket(new byte[1024], 1024);
-			serverSocket1.receive(receivePacket1);
+			serverSocket.receive(receivePacket1);
 			
 			//get address and port from datagram
 			InetAddress p1IPAddress = receivePacket1.getAddress();
@@ -32,7 +32,7 @@ public class STUN{
 			System.out.println("Waiting for Clients on Port 54545...");
 			//create packet to receive data
 			DatagramPacket receivePacket2 = new DatagramPacket(new byte[1024], 1024);
-			serverSocket1.receive(receivePacket2);
+			serverSocket.receive(receivePacket2);
 			
 			//get address and port from datagram
 			InetAddress p2IPAddress = receivePacket2.getAddress();
@@ -45,10 +45,10 @@ public class STUN{
 			String msgInfoOfClient1 = p1IPAddress.toString().substring(1) + ":" + p1Port + ":" + p2IPAddress.toString().substring(1) + ":"+ p2Port + ":end";
 			
 			// Send Information of Client2 to Client1
-	        serverSocket1.send(new DatagramPacket(msgInfoOfClient1.getBytes(), msgInfoOfClient1.getBytes().length, p1IPAddress, p1Port));
+	        serverSocket.send(new DatagramPacket(msgInfoOfClient1.getBytes(), msgInfoOfClient1.getBytes().length, p1IPAddress, p1Port));
 
 	        // Send Information of Client1 to Client2
-	        serverSocket1.send(new DatagramPacket(msgInfoOfClient2.getBytes(), msgInfoOfClient2.getBytes().length, p2IPAddress, p2Port));
+	        serverSocket.send(new DatagramPacket(msgInfoOfClient2.getBytes(), msgInfoOfClient2.getBytes().length, p2IPAddress, p2Port));
 		}
 
 
