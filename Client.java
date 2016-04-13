@@ -82,7 +82,7 @@ public class Client extends Thread{
 	  System.out.println("\n\n");
 	  
       //bind socket
-      clientSocket.bind(new InetSocketAddress(myIp, myPort) );
+      //clientSocket.bind(new InetSocketAddress(myIp, myPort) );
       clientSocket.setReuseAddress(true);
 
       //listen to port
@@ -114,7 +114,7 @@ public class Client extends Thread{
 			Socket mySoc = new Socket(peerIp, peerPort);
 	      
 			//bind socket
-	      	mySoc.bind(new InetSocketAddress(myIp, myPort) );
+	      	//mySoc.bind(new InetSocketAddress(myIp, myPort) );
 	      	mySoc.setReuseAddress(true);
 			
 			pause();
@@ -148,7 +148,7 @@ public class Client extends Thread{
 		//create and listen to socket
 		System.out.println("Listening on Socket: " + myPort);
 		ServerSocket peerSocket = new ServerSocket(myPort);
-		peerSocket.bind(new InetSocketAddress(myIp, myPort) );
+		//peerSocket.bind(new InetSocketAddress(myIp, myPort) );
 		peerSocket.setReuseAddress(true);
 		Socket peer = peerSocket.accept();
 		//peer.bind(new InetSocketAddress(myIp, myPort) );
