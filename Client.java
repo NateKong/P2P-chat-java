@@ -51,8 +51,9 @@ public class Client extends Thread{
 	 * @throws UnknownHostException 
 	 */
 	public static void main(String[] args) throws Exception {
-      String serverName = "teamone.onthewifi.com";
+      //String serverName = "teamone.onthewifi.com";
 	  //String serverName = "10.0.0.232";
+      String serverName = "192.168.1.119";
 	  int port = 54545;
 
       // prepare Socket and data to send
@@ -79,6 +80,10 @@ public class Client extends Thread{
       System.out.println("my Info: " + myIp + ":" + myPort );
       System.out.println("peer Info: " + peerIp + ":" + peerPort );
 	  System.out.println("\n\n");
+	  
+      //bind socket
+      clientSocket.bind(new InetSocketAddress(myIp, myPort) );
+      clientSocket.setReuseAddress(true);
 
       //listen to port
       Thread listen = new Client("listen");
@@ -107,6 +112,11 @@ public class Client extends Thread{
 			//create socket
 			System.out.println("Sending to Socket: " + peerPort);
 			Socket mySoc = new Socket(peerIp, peerPort);
+	      
+			//bind socket
+	      	mySoc.bind(new InetSocketAddress(myIp, myPort) );
+	      	mySoc.setReuseAddress(true);
+			
 			pause();
 					
 			//create streams
@@ -138,7 +148,12 @@ public class Client extends Thread{
 		//create and listen to socket
 		System.out.println("Listening on Socket: " + myPort);
 		ServerSocket peerSocket = new ServerSocket(myPort);
+		peerSocket.bind(new InetSocketAddress(myIp, myPort) );
+		peerSocket.setReuseAddress(true);
 		Socket peer = peerSocket.accept();
+		//peer.bind(new InetSocketAddress(myIp, myPort) );
+		//peer.setReuseAddress(true);
+		
 		System.out.println("Just connected with peer");
 		
 		//create a stream to talk to other peer
