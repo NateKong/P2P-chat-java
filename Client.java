@@ -51,8 +51,8 @@ public class Client extends Thread{
 	 * @throws UnknownHostException 
 	 */
 	public static void main(String[] args) throws Exception {
-      //String serverName = "teamone.onthewifi.com";
-	  String serverName = "10.0.0.71";
+      String serverName = "teamone.onthewifi.com";
+	  //String serverName = "10.0.0.232";
 	  int port = 54545;
 
       // prepare Socket and data to send
@@ -81,8 +81,8 @@ public class Client extends Thread{
 	  System.out.println("\n\n");
 
       //listen to port
-      //Thread listen = new Client("listen");
-      //listen.start();
+      Thread listen = new Client("listen");
+      listen.start();
       
       Thread.sleep(2000);
       
@@ -91,7 +91,7 @@ public class Client extends Thread{
       send.start();
       
 	  //waits for thread to end
-	  //listen.join();
+	  listen.join();
 	  send.join();
       
   	  
