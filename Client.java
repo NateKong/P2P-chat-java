@@ -78,6 +78,7 @@ public class Client extends Thread{
   	  peerPort = Integer.parseInt(splitResponse[3]);
       System.out.println("my Info: " + myIp + ":" + myPort );
       System.out.println("peer Info: " + peerIp + ":" + peerPort );
+	  System.out.println("\n\n");
 
       //listen to port
       Thread listen = new Client("listen");
@@ -115,8 +116,8 @@ public class Client extends Thread{
 			System.out.println(msg);
 			
 			//get string from client B
-			msg = in.readUTF();
-			System.out.println(getTime() + "\t" + msg);
+			String newMsg = in.readUTF();
+			System.out.println(newMsg + "\n");
 			
 			//close socket
 			mySoc.close();
@@ -143,12 +144,12 @@ public class Client extends Thread{
 		
 		//get string from client A
 		String msg = in.readUTF();
-		System.out.println(getTime() + "\t" + msg);
+		System.out.println(msg);
 		
 		//create a message and send it to Client A
-		msg = getTime() + "\t" +myPort+ ": Yes I can hear you!";
-		out.writeUTF(msg);
-		System.out.println(msg);
+		String newMsg = getTime() + "\t" +myPort+ ": Yes I can hear you!";
+		out.writeUTF(newMsg);
+		System.out.println(newMsg + "\n");
 		
 		//close socket
 		peerSocket.close();
