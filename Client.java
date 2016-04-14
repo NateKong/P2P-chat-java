@@ -52,13 +52,13 @@ public class Client extends Thread{
 	 */
 	public static void main(String[] args) throws Exception {
       //String serverName = "teamone.onthewifi.com";
-	  String serverName = "192.168.1.144";
+	  String serverName = "10.0.0.232";
 	  int port = 54545;
 
       // prepare Socket and data to send
       DatagramSocket clientSocket = new DatagramSocket();
-      System.out.println(clientSocket.isBound());
-      //clientSocket.setReuseAddress(true);
+      //System.out.println(clientSocket.isBound());
+      clientSocket.setReuseAddress(true);
       
       
       byte[] sendData = "Hello".getBytes();
@@ -72,7 +72,7 @@ public class Client extends Thread{
       DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
       clientSocket.receive(receivePacket);
       System.out.println("received data from server");
-
+      clientSocket.close();
       // Convert Response to IP and Port
       String response = new String(receivePacket.getData());
       String[] splitResponse = response.split(":");
@@ -85,9 +85,8 @@ public class Client extends Thread{
 	  System.out.println("\n\n");
 
 	//clientSocket.bind(myPort);
-	  clientSocket.close();
-	  
-	  System.out.println(clientSocket.isBound());
+	  //clientSocket.close();
+	 
       //listen to port
       Thread listen = new Client("listen");
       listen.start();
@@ -110,13 +109,12 @@ public class Client extends Thread{
 
 		try {
 			//create socket
-			System.out.println("Sending to Socket: " + peerPort);
 			//Socket mySoc = new Socket(peerIp, peerPort);
 			Socket mySoc = new Socket();
 			mySoc.setReuseAddress(true);
 			//mySoc.bind( new InetSocketAddress("myIp", myPort) );
 			mySoc.connect( new InetSocketAddress(peerIp, peerPort) );
-			System.out.println(mySoc.isBound());
+			//System.out.println(mySoc.isBound());
 			pause();
 					
 			//create streams
@@ -124,6 +122,7 @@ public class Client extends Thread{
 			DataInputStream in = new DataInputStream( mySoc.getInputStream() );
 			
 			//create and send message
+			System.out.println("Sending to Socket: " + peerPort);
 			String msg = getTime() + "\t" + myPort + ": Can you hear me?";
 			out.writeUTF(msg);
 			System.out.println(msg);
@@ -152,7 +151,6 @@ public class Client extends Thread{
 		peerSocket.bind( new InetSocketAddress(myIp, myPort) );
 		peerSocket.setReuseAddress(true);
 		Socket peer = peerSocket.accept();
-		//peer.setReuseAddress(true);
 		
 		System.out.println("Just connected with peer");
 		
@@ -188,7 +186,7 @@ public class Client extends Thread{
 	private static void pause()throws Exception{
 		//create random number between 1 and 15
 		Random rand = new Random();
-		int breath = rand.nextInt(15) + 1;
+		int breath = rand.nextInt(5) + 1;
 		Thread.sleep(breath*1000);
 	}
 }
