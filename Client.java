@@ -52,12 +52,15 @@ public class Client extends Thread{
 	 */
 	public static void main(String[] args) throws Exception {
       //String serverName = "teamone.onthewifi.com";
-	  //String serverName = "10.0.0.232";
-      String serverName = "192.168.1.119";
+	  String serverName = "192.168.1.144";
 	  int port = 54545;
 
       // prepare Socket and data to send
       DatagramSocket clientSocket = new DatagramSocket();
+      System.out.println(clientSocket.isBound());
+      //clientSocket.setReuseAddress(true);
+      
+      
       byte[] sendData = "Hello".getBytes();
       System.out.println("sending Hello to server");
 
@@ -80,11 +83,11 @@ public class Client extends Thread{
       System.out.println("my Info: " + myIp + ":" + myPort );
       System.out.println("peer Info: " + peerIp + ":" + peerPort );
 	  System.out.println("\n\n");
-	  
-      //bind socket
-      //clientSocket.bind(new InetSocketAddress(myIp, myPort) );
-      clientSocket.setReuseAddress(true);
 
+	//clientSocket.bind(myPort);
+	  clientSocket.close();
+	  
+	  System.out.println(clientSocket.isBound());
       //listen to port
       Thread listen = new Client("listen");
       listen.start();
@@ -98,9 +101,6 @@ public class Client extends Thread{
 	  //waits for thread to end
 	  listen.join();
 	  send.join();
-      
-  	  
-  	  clientSocket.close();
 	}//main
 	
 	/**************************************************
@@ -111,12 +111,12 @@ public class Client extends Thread{
 		try {
 			//create socket
 			System.out.println("Sending to Socket: " + peerPort);
-			Socket mySoc = new Socket(peerIp, peerPort);
-	      
-			//bind socket
-	      	//mySoc.bind(new InetSocketAddress(myIp, myPort) );
-	      	mySoc.setReuseAddress(true);
-			
+			//Socket mySoc = new Socket(peerIp, peerPort);
+			Socket mySoc = new Socket();
+			mySoc.setReuseAddress(true);
+			//mySoc.bind( new InetSocketAddress("myIp", myPort) );
+			mySoc.connect( new InetSocketAddress(peerIp, peerPort) );
+			System.out.println(mySoc.isBound());
 			pause();
 					
 			//create streams
@@ -147,11 +147,11 @@ public class Client extends Thread{
 	private static void peerListen() throws Exception{
 		//create and listen to socket
 		System.out.println("Listening on Socket: " + myPort);
-		ServerSocket peerSocket = new ServerSocket(myPort);
-		//peerSocket.bind(new InetSocketAddress(myIp, myPort) );
+		ServerSocket peerSocket = new ServerSocket();
+		peerSocket.setReuseAddress(true);
+		peerSocket.bind( new InetSocketAddress(myIp, myPort) );
 		peerSocket.setReuseAddress(true);
 		Socket peer = peerSocket.accept();
-		//peer.bind(new InetSocketAddress(myIp, myPort) );
 		//peer.setReuseAddress(true);
 		
 		System.out.println("Just connected with peer");
